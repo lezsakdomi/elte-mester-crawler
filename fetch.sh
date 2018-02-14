@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/bash -x
 set -eufo pipefail
 source secret.sh # Export your JSESSIONID there
 
