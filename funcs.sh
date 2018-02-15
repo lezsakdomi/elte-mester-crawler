@@ -68,4 +68,6 @@ letoltminta(){
 	req https://mester.inf.elte.hu/faces/letolt.xhtml -d "j_idt11=j_idt11&javax.faces.ViewState=`getletoltviewstate`&j_idt11:j_idt14=letölt&j_idt11:minta=zip" >"dl/$tema/$feladat/minta.zip"
 }
 
-eval "$@"
+if [ "$0" = "$BASH_SOURCE" ]; then
+	eval "$@"
+fi
