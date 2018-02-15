@@ -14,7 +14,15 @@ The `dl` directory gets filled up with the following contents:
 			- `minta.zip`
 
 ## Usage
-First of all, the `temak.tsv` should point to a valid file.
+First of all, you need to create the `secret.sh` yourself.
+To do this, follow this list:
+1. Login on <https://mester.inf.elte.hu>
+2. Press `F12`
+3. Find the list of the cookies
+4. Export your JSESSIONID in the `secret.sh`, like so:
+	`export JSESSIONID=abc123ghijksomerandomdata185`
+
+Otherwise, the `temak.tsv` should point to a valid file.
 You have three options getting it:
 * Download from *elte-mester-data*: `rm temak.tsv && wget https://raw.githubusercontent.com/lezsakdomi/elte-mester-data/master/temak.tsv`
 * Clone the *elte-mester-data* (which eliminates the need for this repo): `git submodule update --init dl`
