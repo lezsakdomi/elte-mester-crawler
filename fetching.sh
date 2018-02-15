@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 set -eufo pipefail
 source secret.sh # Export your JSESSIONID there
 
@@ -69,5 +69,9 @@ letoltminta(){
 }
 
 if [ "$0" = "$BASH_SOURCE" ]; then
-	eval "$@"
+	if [ $# -eq 0 ]; then
+		bash --init-file "$0" -x
+	else
+		eval "$@"
+	fi
 fi
