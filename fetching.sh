@@ -22,6 +22,10 @@ tema(){
 	echo "$result"
 }
 
+t(){
+	tema $1 $2 >/dev/null
+}
+
 ogetflist(){
 	req https://mester.inf.elte.hu/faces/feladat.xhtml | gawk '
 	BEGIN                                                                          { print "id\tfeladat\t(nehezseg)" }
@@ -56,6 +60,10 @@ feladat(){
 	echo "$result"
 }
 
+f(){
+	feladat $1 >/dev/null
+}
+
 getletoltviewstate(){
 	req https://mester.inf.elte.hu/faces/letolt.xhtml | grep -oP 'id="j_id1:javax\.faces\.ViewState:0" value="\K[^"]+(?=")' | tail -n 1 | tr -d "\n"
 }
@@ -66,6 +74,11 @@ letoltleiras(){
 
 letoltminta(){
 	req https://mester.inf.elte.hu/faces/letolt.xhtml -d "j_idt11=j_idt11&javax.faces.ViewState=`getletoltviewstate`&j_idt11:j_idt14=letölt&j_idt11:minta=zip" >"dl/$tema/$feladat/minta.zip"
+}
+
+letolt(){
+	letoltleiras
+	letoltminta
 }
 
 if [ "$0" = "$BASH_SOURCE" ]; then
