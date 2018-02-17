@@ -28,7 +28,7 @@ t(){
 
 ogetflist(){
 	req https://mester.inf.elte.hu/faces/feladat.xhtml | gawk '
-	BEGIN                                                                          { print "id\tfeladat\t(nehezseg)" }
+	BEGIN                                                                          { print "id\tfeladat\tnehezseg" }
 	match($0, /<option value="([0-9]+)">[0-9]+. ﻿?(.*)( \*+)?<\/option>/, m)  { print m[1] "\t" m[2] "\t" m[3] }
 	'
 }
