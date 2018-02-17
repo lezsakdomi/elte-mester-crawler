@@ -2,6 +2,8 @@
 This script is intended to download the data from the hardly usable <https://mester.inf.elte.hu> to make later processing easier.
 It fills up the `dl` directory with the gathered data.
 
+The included Makefile contains a rule for creating the `szintek` folder, which organises temas in szints using symlinks.
+
 ## Directory structure
 The `dl` directory gets filled up with the following contents:
 - `dl`
@@ -12,6 +14,9 @@ The `dl` directory gets filled up with the following contents:
 		- *feladatMegnevezes*
 			- `feladat.pdf`
 			- `minta.zip`
+- `szintek`
+	- *szintNev*
+		- *temaMegnevezes* -> ../../dl/*temaMegnevezes*
 
 ## Usage
 First of all, you need to create the `secret.sh` yourself.
