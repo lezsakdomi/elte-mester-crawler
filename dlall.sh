@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eufo pipefail
 source fetching.sh
+
+echo "Fetching tema list" >&2
+fulltemalist 2>/dev/null
+
 while read temaid; do
 	if [ ${SKIP_TEMA:-0} -gt 0 ]; then
 		echo "  (skipping tema $temaid)" >&2
@@ -49,4 +53,4 @@ while read temaid; do
 			echo "    (minta already downloaded)" >&2
 		fi
 	done < <(getflist | tail -n +2 | cut -d$'\t' -f1)
-done < <(cat temak.tsv | tail -n +2 | cut -d$'\t' -f1)
+done < <(getfulltemalist | tail -n +2 | cut -d$'\t' -f1)

@@ -17,13 +17,22 @@ gettemaviewstate(){
 	req https://mester.inf.elte.hu/faces/tema.xhtml | grep -oP 'id="j_id1:javax\.faces\.ViewState:0" value="\K[^"]+(?=")' | tail -n 1 | tr -d "\n"
 }
 
+ogetszintlist(){
+	req https://mester.inf.elte.hu/faces/tema.xhtml | awk '
+	BEGIN { print "id\tszint" }
+	/<select id="form:name"/,/<\/select>/ {
+		if (match($0, /<option value="([0-9]+)"( selected="selected")?>(.*)<\/option>/, m)) { print m[1] "\t" m[3] }
+	}
+	'
+}
+
 szint(){
 	result=$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&form%3Aname=$1&form%3Atemalist=0&javax.faces.ViewState=`gettemaviewstate`&javax.faces.source=form%3Aname&javax.faces.partial.event=change&javax.faces.partial.execute=form%3Aname%20form%3Aname&javax.faces.partial.render=form%3Atemalist&javax.faces.behavior.event=change&javax.faces.partial.ajax=true")
 	export szint=$(echo "$result" | grep -oP '<option value="[1-9][0-9]*" selected="selected">\K[^<]+(?=</option>)')
 	echo "$result"
 }
 
-ogettemalist(){
+ogettemalist(){ # it requires szintID since it selects that
 	szint $1 | gawk '
 	BEGIN { print "id\tszint\ttema"; szint="'"${szint:-No szint captured}"'"; szintid="'"${1:-?}"'" }
 	/<select id="form:name"/,/<\/select>/ {
@@ -36,6 +45,25 @@ ogettemalist(){
 			{ print szintid " " m[1] "\t" szint "\t" m[2] }
 	}
 	'
+}
+
+ogetfulltemalist(){
+	echo -e "id\tszint\ttema"
+	while read szintid; do
+		ogettemalist $szintid | tail -n +2
+	done < <(ogetszintlist | tail -n +2 | cut -d$'\t' -f1)
+}
+
+getfulltemalist(){
+	if [ -f "dl/temak.tsv" ]; then
+		cat "dl/temak.tsv"
+	else
+		ogetfulltemalist
+	fi
+}
+
+fulltemalist(){
+	ogetfulltemalist >"dl/temak.tsv"
 }
 
 tema(){
