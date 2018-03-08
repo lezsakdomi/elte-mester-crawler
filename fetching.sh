@@ -39,6 +39,7 @@ ogettemalist(){
 }
 
 tema(){
+	szint $1 >/dev/null
 	result=$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&javax.faces.ViewState=`gettemaviewstate`&form:j_idt16=választom&form:name=$1&form:temalist=$2")
 	echo "$result" | (! grep javax_faces_developmentstage_messages >/dev/null 2>&1)
 	export tema=$(echo "$result" | grep -oP '<h1>Felhasználó: .*, Téma: \K[^<]*(?=</h1>)')
