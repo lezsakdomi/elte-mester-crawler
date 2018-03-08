@@ -24,12 +24,20 @@ while read temaid; do
 			continue
 		fi
 
+		tmpfeladat=$(getflist | grep -oP "^$feladatid"'\t\K[^\t]*')
+		if [ -f "dl/$tema/$tmpfeladat/feladat.pdf" -a -f "dl/$tema/$tmpfeladat/feladat.txt" -a -f "dl/$tema/$tmpfeladat/minta.zip" ]; then
+			echo "  (auto-skipping feladat $tmpfeladat)" >&2
+			continue
+		fi
+
 		echo ">> Processing feladat $feladatid" >&2
 		f $feladatid 2>/dev/null
 		
 		if [ ! -f "dl/$tema/$feladat/feladat.pdf" ]; then
 			echo ">>> Downloading leiras" >&2
 			letoltleiras 2>/dev/null
+			echo ">>>> Converting to txt" >&2
+			pdftotext -layout "dl/$tema/$feladat/feladat.pdf"
 		else
 			echo "    (leiras already downloaded)" >&2
 		fi
