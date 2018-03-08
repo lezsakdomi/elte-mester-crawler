@@ -17,6 +17,27 @@ gettemaviewstate(){
 	req https://mester.inf.elte.hu/faces/tema.xhtml | grep -oP 'id="j_id1:javax\.faces\.ViewState:0" value="\K[^"]+(?=")' | tail -n 1 | tr -d "\n"
 }
 
+szint(){
+	result=$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&form%3Aname=$1&form%3Atemalist=0&javax.faces.ViewState=`gettemaviewstate`&javax.faces.source=form%3Aname&javax.faces.partial.event=change&javax.faces.partial.execute=form%3Aname%20form%3Aname&javax.faces.partial.render=form%3Atemalist&javax.faces.behavior.event=change&javax.faces.partial.ajax=true")
+	export szint=$(echo "$result" | grep -oP '<option value="[1-9][0-9]*" selected="selected">\K[^<]+(?=</option>)')
+	echo "$result"
+}
+
+ogettemalist(){
+	szint $1 | gawk '
+	BEGIN { print "id\tszint\ttema"; szint="'"${szint:-No szint captured}"'"; szintid="'"${1:-?}"'" }
+	/<select id="form:name"/,/<\/select>/ {
+		if (match($0, /<option value="([0-9]+)" selected="selected">(.*)<\/option>/, m)) {
+			{ szintid=m[1]; szint=m[2] }
+		}
+	}
+	/<select id="form:temalist"/,/<\/select>/ {
+		if (match($0, /<option value="([0-9]+)">(.*)<\/option>/, m))
+			{ print szintid " " m[1] "\t" szint "\t" m[2] }
+	}
+	'
+}
+
 tema(){
 	result=$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&javax.faces.ViewState=`gettemaviewstate`&form:j_idt16=választom&form:name=$1&form:temalist=$2")
 	echo "$result" | (! grep javax_faces_developmentstage_messages >/dev/null 2>&1)
