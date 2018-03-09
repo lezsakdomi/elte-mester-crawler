@@ -3,14 +3,14 @@ set -eufo pipefail
 source secret.sh # Export your JSESSIONID there
 
 req(){
-	result=$(curl --insecure -X POST -b "JSESSIONID=$JSESSIONID" "$@")
-	echo "$result"
-	if echo "$result" | grep '<div id="error"' >/dev/null 2>&1; then
-		echo -ne "\033[31m" >&2
-		echo "Error occurred: $(echo "$result" | grep -oP '<div id="error"[^>]*>\K([^<]|.)+(?=</div>)')" >&2
-		echo -ne "\033[0m" >&2
-		return 1
-	fi
+	curl --insecure -X POST -b "JSESSIONID=$JSESSIONID" "$@" | awk '
+	BEGIN { status=0 }
+	match($0, /<div id="error" class="grayBox" style="border: 1px solid #900;">([^<]+)<\/div>/, m) {
+		print "\033[31mError occurred: " m[1] "\033[0m" > "/dev/stderr"; status=1; print
+	}
+	{print}
+	END { exit status }
+	'
 }
 
 gettemaviewstate(){
