@@ -20,6 +20,29 @@ while read temaid; do
 	else
 		echo "   (flist already downloaded)" >&2
 	fi
+
+	if [ ! -f "dl/$tema/mintafeladat.pdf" ]; then
+		echo ">> Downloading mintafeladat leiras" >&2
+		letoltmintafeladatleiras 2>/dev/null
+		echo ">>> Converting to txt" >&2
+		pdftotext -layout "dl/$tema/mintafeladat.pdf"
+	else
+		echo "   (mintafeladatleiras already downloaded)" >&2
+	fi
+
+	if [ ! -f "dl/$tema/feladat.cpp" ]; then
+		echo ">> Downloading mintafeladat C++ megoldas" >&2
+		letoltmintafeladatcpp 2>/dev/null
+	else
+		echo "   (mintafeladatcpp already downloaded)" >&2
+	fi
+
+	if [ ! -f "dl/$tema/feladat.pas" ]; then
+		echo ">> Downloading mintafeladat pascal megoldas" >&2
+		letoltmintafeladatpas 2>/dev/null
+	else
+		echo "   (mintafeladatpas already downloaded)" >&2
+	fi
 	
 	while read feladatid; do
 		if [ ${SKIP_FELADAT:-0} -gt 0 ]; then

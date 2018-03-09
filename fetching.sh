@@ -143,6 +143,22 @@ letolt(){
 	letoltminta
 }
 
+gettananyagviewstate(){
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml | grep -oP 'id="j_id1:javax\.faces\.ViewState:0" value="\K[^"]+(?=")' | tail -n 1 | tr -d "\n"
+}
+
+letoltmintafeladatleiras(){
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt9=j_idt9&j_idt9:j_idt11=feladat+és+megoldása&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/mintafeladat.pdf"
+}
+
+letoltmintafeladatcpp(){
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt9=j_idt9&j_idt9:j_idt12=C+++programkód&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/feladat.cpp"
+}
+
+letoltmintafeladatpas(){
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt9=j_idt9&j_idt9:j_idt13=Pascal+programkód&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/feladat.pas"
+}
+
 if [ "$0" = "$BASH_SOURCE" ]; then
 	if [ $# -eq 0 ]; then
 		bash --init-file "$0" -x
