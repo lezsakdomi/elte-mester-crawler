@@ -69,7 +69,12 @@ fulltemalist(){
 tema(){
 	szint $1 >/dev/null
 	result=$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&javax.faces.ViewState=`gettemaviewstate`&form:j_idt16=választom&form:name=$1&form:temalist=$2")
-	echo "$result" | (! grep javax_faces_developmentstage_messages >/dev/null 2>&1)
+	echo "$result" | (! grep -oP '<ul id="javax_faces_developmentstage_messages".*<span>\s*\K.*(?=</span>)' 2>/dev/null) | (
+		output=$(cat -)
+		if [ -n "$output" ]; then
+			echo -e "\033[31mUnhandled message: $output\033[0m"
+		fi
+	)
 	export tema=$(echo "$result" | grep -oP '<h1>Felhasználó: .*, Téma: \K[^<]*(?=</h1>)')
 	[ -n "$tema" ]
 	mkdir -p "dl/$tema"
