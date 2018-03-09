@@ -23,23 +23,26 @@ while read temaid; do
 
 	if [ ! -f "dl/$tema/mintafeladat.pdf" ]; then
 		echo ">> Downloading mintafeladat leiras" >&2
-		letoltmintafeladatleiras 2>/dev/null
-		echo ">>> Converting to txt" >&2
-		pdftotext -layout "dl/$tema/mintafeladat.pdf"
+		if letoltmintafeladatleiras 2>/dev/null; then
+			echo ">>> Converting to txt" >&2
+			pdftotext -layout "dl/$tema/mintafeladat.pdf" || { echo -e "    > \033[41mFailed\033[0m"; >"dl/$tema/mintafeladat.txt"; }
+		else
+			echo -e "   > \033[41mFailed\033[0m" >&2; >"dl/$tema/mintafeladat.pdf"
+		fi
 	else
 		echo "   (mintafeladatleiras already downloaded)" >&2
 	fi
 
 	if [ ! -f "dl/$tema/feladat.cpp" ]; then
 		echo ">> Downloading mintafeladat C++ megoldas" >&2
-		letoltmintafeladatcpp 2>/dev/null
+		letoltmintafeladatcpp 2>/dev/null || { echo -e "   > \033[41mFailed\033[0m"; >"dl/$tema/feladat.cpp"; }
 	else
 		echo "   (mintafeladatcpp already downloaded)" >&2
 	fi
 
 	if [ ! -f "dl/$tema/feladat.pas" ]; then
 		echo ">> Downloading mintafeladat pascal megoldas" >&2
-		letoltmintafeladatpas 2>/dev/null
+		letoltmintafeladatpas 2>/dev/null || { echo -e "   > \033[41mFailed\033[0m"; >"dl/$tema/feladat.pas"; }
 	else
 		echo "   (mintafeladatpas already downloaded)" >&2
 	fi
@@ -62,16 +65,20 @@ while read temaid; do
 		
 		if [ ! -f "dl/$tema/$feladat/feladat.pdf" ]; then
 			echo ">>> Downloading leiras" >&2
-			letoltleiras 2>/dev/null
-			echo ">>>> Converting to txt" >&2
-			pdftotext -layout "dl/$tema/$feladat/feladat.pdf"
+			if letoltleiras 2>/dev/null; then
+				echo ">>>> Converting to txt" >&2
+				pdftotext -layout "dl/$tema/$feladat/feladat.pdf" \
+					|| { echo -e "     > \033[41mFailed\033[0m"; >"dl/$tema/$feladat/feladat.txt"; }
+			else
+				echo -e "   > \033[41mFailed\033[0m" >&2; >"dl/$tema/$feladat/feladat.pdf"
+			fi
 		else
 			echo "    (leiras already downloaded)" >&2
 		fi
 		
 		if [ ! -f "dl/$tema/$feladat/minta.zip" ]; then
 			echo ">>> Downloading minta" >&2
-			letoltminta 2>/dev/null
+			letoltminta 2>/dev/null || { echo -e "    > \033[41mFailed\033[0m"; >"dl/$tema/$feladat/minta.zip"; }
 		else
 			echo "    (minta already downloaded)" >&2
 		fi
