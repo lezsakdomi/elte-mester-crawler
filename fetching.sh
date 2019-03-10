@@ -131,11 +131,11 @@ getletoltviewstate(){
 }
 
 letoltleiras(){
-	req https://mester.inf.elte.hu/faces/letolt.xhtml -d "j_idt11=j_idt11&javax.faces.ViewState=`getletoltviewstate`&j_idt11:j_idt14=letölt&j_idt11:minta=pdf" >"dl/$tema/$feladat/feladat.pdf"
+	req https://mester.inf.elte.hu/faces/letolt.xhtml -d "j_idt10=j_idt10&javax.faces.ViewState=`getletoltviewstate`&j_idt10:j_idt13=letölt&j_idt10:minta=pdf" >"dl/$tema/$feladat/feladat.pdf"
 }
 
 letoltminta(){
-	req https://mester.inf.elte.hu/faces/letolt.xhtml -d "j_idt11=j_idt11&javax.faces.ViewState=`getletoltviewstate`&j_idt11:j_idt14=letölt&j_idt11:minta=zip" >"dl/$tema/$feladat/minta.zip"
+	req https://mester.inf.elte.hu/faces/letolt.xhtml -d "j_idt10=j_idt10&javax.faces.ViewState=`getletoltviewstate`&j_idt10:j_idt13=letölt&j_idt10:minta=zip" >"dl/$tema/$feladat/minta.zip"
 }
 
 letolt(){
@@ -148,15 +148,15 @@ gettananyagviewstate(){
 }
 
 letoltmintafeladatleiras(){
-	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt9=j_idt9&j_idt9:j_idt11=feladat+és+megoldása&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/mintafeladat.pdf"
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt10=j_idt10&j_idt10:j_idt12=feladat+és+megoldása&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/mintafeladat.pdf"
 }
 
 letoltmintafeladatcpp(){
-	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt9=j_idt9&j_idt9:j_idt12=C+++programkód&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/feladat.cpp"
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt10=j_idt10&j_idt10:j_idt13=C+++programkód&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/feladat.cpp"
 }
 
 letoltmintafeladatpas(){
-	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt9=j_idt9&j_idt9:j_idt13=Pascal+programkód&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/feladat.pas"
+	req https://mester.inf.elte.hu/faces/tananyag.xhtml -d "j_idt10=j_idt10&j_idt10:j_idt14=Pascal+programkód&javax.faces.ViewState=`gettananyagviewstate`" >"dl/$tema/feladat.pas"
 }
 
 if [ "$0" = "$BASH_SOURCE" ]; then
