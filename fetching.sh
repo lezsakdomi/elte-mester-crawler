@@ -68,7 +68,7 @@ fulltemalist(){
 
 tema(){
 	szint $1 >/dev/null
-	result=$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&javax.faces.ViewState=`gettemaviewstate`&form:j_idt16=választom&form:name=$1&form:temalist=$2")
+	result="$(req https://mester.inf.elte.hu/faces/tema.xhtml -d "form=form&javax.faces.ViewState=`gettemaviewstate`&form:j_idt16=választom&form:name=$1&form:temalist=$2")" || return 1
 	echo "$result" | (! grep -oP '<ul id="javax_faces_developmentstage_messages".*<span>\s*\K.*(?=</span>)' 2>/dev/null) | (
 		output=$(cat -)
 		if [ -n "$output" ]; then

@@ -12,7 +12,7 @@ while read temaid; do
 		continue
 	fi
 	echo "> Processing tema $temaid" >&2
-	t $temaid 2>/dev/null
+	t $temaid 2>/dev/null || { echo -e "  > \033[41mFailed to switch tema\033[0m"; continue; }
 
 	if [ ! -f "dl/$tema/flist.tsv" ]; then
 		echo ">> Downloading flist" >&2
